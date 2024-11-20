@@ -1,0 +1,19 @@
+{
+	"viewports": [
+		{
+			"name": "mobile",
+			"width": 540,
+			"height": 960
+		},
+		{
+			"name": "tablet",
+			"width": 1535,
+			"height": 1155
+		},
+		{
+			"name": "desktop",
+			"width": 2050,
+			"height": 1200
+		}
+	]
+}

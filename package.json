@@ -1,0 +1,17 @@
+{
+  "name": "playwright-screenshot",
+  "version": "1.0.0",
+  "description": "A tool to take screenshots of webpages at multiple viewports using Playwright.",
+  "main": "index.js",
+  "scripts": {
+    "install-browsers": "npx playwright install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "nocturnalbeast",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.49.0",
+    "yargs": "^17.7.2"
+  }
+}
