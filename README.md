@@ -17,27 +17,29 @@ npm run install-browsers
 ## Usage
 
 ```bash
-node index.js --url <webpage-url> --output <output-dir> --browser <browser-type> --config <config-file> [--dark]
+node index.js --url <webpage-url> [options]
 ```
 
 ### Options:
 
 - `--url, -u`: URL of the webpage to capture (required)
 - `--output, -o`: Output directory for screenshots (default: "screenshots")
+- `--dark, -d`: Enable dark theme for screenshots (default: false)
 - `--browser, -b`: Browser to use (chromium, firefox, or webkit) (default: "chromium")
+- `--zoom, -z`: Zoom level for the page (e.g., 1.5 for 150% zoom) (default: 1.0)
+- `--delay`: Delay in milliseconds before taking each screenshot (default: 0)
 - `--config, -c`: Path to viewport configuration file (required)
-- `--dark, -d`: Enable dark theme for screenshots (optional)
 - `--help`: Show help information
 
 ### Example:
 
 ```bash
-node index.js --url https://example.com --output screenshots --browser chromium --config viewports.json --dark
+node index.js --url https://example.com --output screenshots --browser firefox --dark --zoom 1.2 --delay 1000 --config viewports.json
 ```
 
 ## Configuration File Format
 
-Create a JSON file with viewport configurations:
+Create a JSON file (e.g., `viewports.json`) with your viewport configurations:
 
 ```json
 {
@@ -63,5 +65,5 @@ Create a JSON file with viewport configurations:
 
 ## Output
 
-The tool will generate screenshots in the specified output directory with filenames following the pattern:
+Screenshots are saved in the specified output directory with filenames following the pattern:
 `{viewport-name}-{theme}.png` (e.g., `mobile-light.png`, `desktop-dark.png`)

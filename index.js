@@ -35,6 +35,29 @@ const argv = yargs(hideBin(process.argv))
     default: "chromium",
     choices: ["chromium", "firefox", "webkit"],
   })
+  .option("zoom", {
+    alias: "z",
+    description: "Zoom level for the page (e.g., 1.5 for 150% zoom)",
+    type: "number",
+    default: 1.0,
+    coerce: (value) => {
+      if (value <= 0) {
+        throw new Error("Zoom level must be greater than 0");
+      }
+      return value;
+    },
+  })
+  .option("delay", {
+    description: "Delay in milliseconds before taking each screenshot",
+    type: "number",
+    default: 0,
+    coerce: (value) => {
+      if (value < 0) {
+        throw new Error("Delay must be non-negative");
+      }
+      return value;
+    },
+  })
   .option("config", {
     alias: "c",
     description: "Path to viewport configuration JSON file",
@@ -55,7 +78,14 @@ if (!Array.isArray(config.viewports)) {
   process.exit(1);
 }
 
-async function captureScreenshots(url, outputDir, darkMode, browserName) {
+async function captureScreenshots(
+  url,
+  outputDir,
+  darkMode,
+  browserName,
+  zoomLevel,
+  delay
+) {
   const outputPath = join(__dirname, outputDir);
   if (!existsSync(outputPath)) {
     console.error(`Error: Output directory "${outputPath}" does not exist!`);
@@ -78,7 +108,7 @@ async function captureScreenshots(url, outputDir, darkMode, browserName) {
   console.log(
     `Taking screenshots of ${url} using ${browserName} (${
       darkMode ? "dark" : "light"
-    } mode)`
+    } mode, ${zoomLevel * 100}% zoom${delay ? `, ${delay}ms delay` : ""})`
   );
 
   for (const viewport of config.viewports) {
@@ -93,6 +123,13 @@ async function captureScreenshots(url, outputDir, darkMode, browserName) {
 
     await page.goto(url, { waitUntil: "networkidle" });
 
+    await page.evaluate(`document.body.style.zoom=${zoomLevel}`);
+
+    if (delay > 0) {
+      console.log(`Waiting for ${delay}ms before capture...`);
+      await page.waitForTimeout(delay);
+    }
+
     const theme = darkMode ? "dark" : "light";
     await page.screenshot({
       path: join(outputPath, `${viewport.name}-${theme}.png`),
@@ -104,6 +141,11 @@ async function captureScreenshots(url, outputDir, darkMode, browserName) {
   console.log("Screenshots captured successfully!");
 }
 
-captureScreenshots(argv.url, argv.output, argv.dark, argv.browser).catch(
-  console.error
-);
+captureScreenshots(
+  argv.url,
+  argv.output,
+  argv.dark,
+  argv.browser,
+  argv.zoom,
+  argv.delay
+).catch(console.error);
