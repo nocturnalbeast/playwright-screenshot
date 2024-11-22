@@ -2,9 +2,10 @@
 node_modules/
 package-lock.json
 
-# Screenshots output
+# Screenshot / PDF output
 screenshots/
 *.png
+*.pdf
 
 # Environment variables
 .env
